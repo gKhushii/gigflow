@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-950 text-slate-100;
+}
+.auth-input {
+  @apply w-full mb-3 px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:outline-none focus:border-indigo-500;
+}
+
+.primary-btn {
+  @apply px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-semibold;
+}

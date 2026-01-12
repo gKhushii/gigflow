@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+const { protect } = require("../middleware/authMiddleware");
+const { placeBid, getBidsForGig } = require("../controllers/bidController");
+const { hireFreelancer } = require("../controllers/bidController");
+router.post("/", protect, placeBid);
+router.get("/:gigId", protect, getBidsForGig);
+router.put("/hire/:bidId", protect, hireFreelancer);
+router.patch("/hire/:bidId", protect, hireFreelancer);
+module.exports = router;
