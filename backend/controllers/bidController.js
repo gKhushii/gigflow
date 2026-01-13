@@ -84,15 +84,24 @@ exports.hireFreelancer = async (req, res) => {
 
     await session.commitTransaction();
     session.endSession();
-    // 🔔 SOCKET NOTIFICATION
-const freelancerId = bid.freelancerId.toString();
-const socketId = global.onlineUsers.get(freelancerId);
 
-if (socketId) {
-  global.io.to(socketId).emit("hired", {
-    gigTitle: gig.title
-  });
-}
+    // ✅ FETCH HIRED BID WITH DETAILS (after commit)
+    const hiredBid = await Bid.findById(bidId).populate("freelancerId gigId");
+
+    // 🔔 SOCKET NOTIFICATION
+    const freelancerId = hiredBid.freelancerId._id.toString();
+    const gigTitle = hiredBid.gigId.title;
+
+    const socketId = global.onlineUsers.get(freelancerId);
+
+    console.log("HIRING SOCKET CHECK:", freelancerId, socketId);
+
+    if (socketId) {
+      global.io.to(socketId).emit("hired", {
+        message: `🎉 You have been hired for "${gigTitle}"`,
+        gigId: hiredBid.gigId._id
+      });
+    }
 
     res.json({ message: "Freelancer hired successfully" });
 
@@ -102,4 +111,3 @@ if (socketId) {
     res.status(400).json({ message: err.message });
   }
 };
-
