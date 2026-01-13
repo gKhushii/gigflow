@@ -12,8 +12,12 @@ export default function Navbar() {
   }, []);
 
   const logout = async () => {
-    await api.post("/auth/logout");
-    window.location.href = "/login";
+    try {
+      await api.post("/auth/logout");
+    } catch (e) {}
+
+    setUser(null);          
+    navigate("/login");   
   };
 
   return (
