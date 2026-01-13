@@ -22,6 +22,16 @@ exports.placeBid = async (req, res) => {
       message,
       price
     });
+    //notify client in real-time
+const clientId = gig.ownerId.toString();
+const socketId = global.onlineUsers.get(clientId);
+
+if (socketId) {
+  global.io.to(socketId).emit("new-bid", {
+    ...bid.toObject(),
+    gigId: gigId.toString()
+  });
+}
 
     res.status(201).json(bid);
   } catch (err) {

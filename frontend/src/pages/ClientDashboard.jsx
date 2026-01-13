@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
+import socket from "../services/socket";   // ✅ IMPORTANT
 
 export default function ClientDashboard() {
-  const { id } = useParams();
+  const { id } = useParams(); // gigId
   const [bids, setBids] = useState([]);
 
   const fetchBids = async () => {
@@ -12,7 +13,26 @@ export default function ClientDashboard() {
     setBids(res.data);
   };
 
-  useEffect(() => { fetchBids(); }, []);
+  // initial fetch
+  useEffect(() => {
+    fetchBids();
+  }, [id]);
+
+  // 🔔 realtime listener
+  useEffect(() => {
+    socket.on("new-bid", (bid) => {
+      console.log("NEW BID RECEIVED:", bid);
+
+      // only update if this bid belongs to this gig
+      if (bid.gigId === id) {
+        fetchBids();
+        // OR faster:
+        // setBids(prev => [bid, ...prev]);
+      }
+    });
+
+    return () => socket.off("new-bid");
+  }, [id]);
 
   const hire = async (bidId) => {
     await api.patch(`/bids/hire/${bidId}`);
