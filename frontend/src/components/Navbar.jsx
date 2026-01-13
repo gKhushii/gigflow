@@ -17,7 +17,7 @@ export default function Navbar() {
     } catch (e) {}
 
     setUser(null);          
-    navigate("/login");   
+    navigate("/login",{replace:true});   
   };
 
   return (
