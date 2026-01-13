@@ -8,7 +8,6 @@ import ClientDashboard from "./pages/ClientDashboard";
 
 function App() {
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Gigs />} />
         <Route path="/login" element={<Login />} />
@@ -17,7 +16,6 @@ function App() {
         <Route path="/gig/:id" element={<GigDetails />} />
         <Route path="/client/gig/:id" element={<ClientDashboard />} />
       </Routes>
-    </BrowserRouter>
   );
 }
 
