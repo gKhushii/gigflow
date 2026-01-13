@@ -6,13 +6,13 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    api.get("/api/auth/me")
+    api.get("/auth/me")
       .then(res => setUser(res.data))
       .catch(() => setUser(null));
   }, []);
 
   const logout = async () => {
-    await api.post("/api/auth/logout");
+    await api.post("/auth/logout");
     window.location.href = "/login";
   };
 
